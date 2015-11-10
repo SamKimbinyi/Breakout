@@ -78,6 +78,7 @@ namespace Breakout
             BallPos[0] += ballVelocity[0];
             BallPos[1] -= ballVelocity[1];
 
+            #endregion
 
 
             //Collison Detection
@@ -324,4 +325,4 @@ namespace Breakout
 
     }
 }
-}
+
