@@ -3,6 +3,7 @@ using System.Drawing;
 using SdlDotNet.Graphics;
 using SdlDotNet.Core;
 using SdlDotNet.Input;
+using System.Diagnostics;
 
 namespace Breakout
 {
@@ -10,7 +11,7 @@ namespace Breakout
     public static class Program
     {
 
-          const int FRAME_WIDTH = 640;
+          const int FRAME_WIDTH = 640; 
         const int FRAME_HEIGHT = 480;
         const int COLOUR_DEPTH = 32;
         const bool FRAME_RESIZABLE = false;
@@ -24,7 +25,7 @@ namespace Breakout
 
 
         public static int[] BallPos = new int[2] { FRAME_WIDTH / 2, FRAME_HEIGHT / 2 };
-        public static int[] ballVelocity = new int [2] {5,5};
+        public static int[] ballVelocity = new int [2] {1,1};
 
         // STATE
         // Keep the state of the elements of the game here (variables hold state).
@@ -108,6 +109,8 @@ namespace Breakout
             }
            
             #endregion
+
+            Debug.WriteLine("Ball X: {0} Ball Y:{1}  \t Bat X:{2}",BallPos[0].ToString(),BallPos[1].ToString(),BatPos.ToString());
         }
 
         public static void draw()
