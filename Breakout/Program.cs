@@ -81,7 +81,7 @@ namespace Breakout
             #endregion
 
 
-            //Collison Detection
+            #region BatCollisionDetection
 
             //X
 
@@ -100,8 +100,14 @@ namespace Breakout
             }
 
 
-            //The Bat
 
+            if (BallPos[0] >= BatPos && BallPos[0] <= BatPos + 120 && BallPos[1] <= FRAME_HEIGHT - 30 && BallPos[1] >= FRAME_HEIGHT - 30 + 32) {
+
+                ballVelocity[0] *= -1;
+                ballVelocity[1] *= -1;
+            }
+           
+            #endregion
         }
 
         public static void draw()
