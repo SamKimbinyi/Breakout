@@ -110,7 +110,7 @@ namespace Breakout
            
             #endregion
 
-            Debug.WriteLine("Ball X: {0} Ball Y:{1}  \t Bat X:{2}",BallPos[0].ToString(),BallPos[1].ToString(),BatPos.ToString());
+            Debug.WriteLine("Ball X: {0} Ball Y:{1}  \t Bat X:{2} \t Ball Velocity:{3}",BallPos[0].ToString(),BallPos[1].ToString(),BatPos.ToString(),ballVelocity[0].ToString());
         }
 
         public static void draw()
@@ -135,7 +135,7 @@ namespace Breakout
             #endregion
 
             drawSprite(Sprite.fire, 600, 6);
-
+            drawSprite(Sprite.blue2, 600, 6);
 
         }
 
@@ -162,6 +162,19 @@ namespace Breakout
         // this procedure is called when a key is pressed or released
        public static void onKeyboard(object sender, SdlDotNet.Input.KeyboardEventArgs args)
         {
+
+            if (args.Key == Key.Q) {
+
+                ballVelocity[0] -= 1;
+                ballVelocity[1] -= 1;
+            }
+
+            if (args.Key == Key.E) {
+
+                ballVelocity[0] += 1;
+                ballVelocity[1] += 1;
+            }
+
             // ...
         }
 
