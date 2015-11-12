@@ -20,12 +20,15 @@ namespace Breakout
         const bool USE_HARDWARE = true;
 
         public static bool gameStart = false;
+        public static SdlDotNet.Graphics.Font font = new SdlDotNet.Graphics.Font(@"Arial.ttf", 42);
 
-        public static int BatPos =  FRAME_WIDTH/2;
+        public static int[] BatPos =  new int[2] {FRAME_WIDTH/2, FRAME_HEIGHT-30};
 
-
+        
         public static int[] BallPos = new int[2] { FRAME_WIDTH / 2, FRAME_HEIGHT / 2 };
         public static int[] ballVelocity = new int [2] {1,1};
+
+       
 
         // STATE
         // Keep the state of the elements of the game here (variables hold state).
@@ -57,22 +60,47 @@ namespace Breakout
         }
 
 
+        //Touch this and die
+        public static bool intsersects(int r1_x, int r1_y, int r1_width, int r1_height, int r2_x, int r2_y, int r2_width, int r2_height)
+        {
 
+            if ((( r1_x >= r2_x && r1_x <= r2_x + r2_width) && (r1_y >= r2_y && r1_y <= r2_y + r2_height)) || ((r1_x >= r2_x && r1_x <= r2_width)  && ( r1_y+r1_height >= r2_y && r1_y +r1_height <= r2_y + r2_height)) || ((r1_x+r1_width > r2_x && r1_x+r1_width <= r2_x + r2_width) && (r1_y + r1_height >= r2_y && r1_y + r1_height <= r2_y + r2_height )) || ((r1_x >= r2_x && r1_x <= r2_x + r2_width) &&  (r1_y >= r2_y && r1_y <= r2_y+ r2_height) ) )
+            {
+                return true;
+            }
+            else {
+
+                return false;
+            }
+
+            
+
+             
+        }
 
         public static void update()
         {
 
             #region UpdateBat
 
-            BatPos = Mouse.MousePosition.X;
+            BatPos[0] = Mouse.MousePosition.X;
+
+
+
+            if (BatPos[0] >= 528)
+            {
+
+                BatPos[0] = 528;
+            }
+
             #endregion
 
             #region UpdateBall
             if (!gameStart)
             {
 
-                BallPos[0] = BatPos + 50;
-                BallPos[1] = FRAME_HEIGHT - 52;
+                BallPos[0] = BatPos[0] + 50;
+                BallPos[1] = BatPos[1]- 33;
 
             }
 
@@ -102,15 +130,19 @@ namespace Breakout
 
 
 
-            if (BallPos[0] >= BatPos && BallPos[0] <= BatPos + 120 && BallPos[1] <= FRAME_HEIGHT - 30 && BallPos[1] >= FRAME_HEIGHT - 30 + 32) {
+            if (intsersects(BallPos[0], BallPos[1], 24, 24, BatPos[0], BatPos[1], 120, 32)) {
 
-                ballVelocity[0] *= -1;
+          
                 ballVelocity[1] *= -1;
+                
             }
+            //0, 240, 120, 32
+
+           
            
             #endregion
 
-            Debug.WriteLine("Ball X: {0} Ball Y:{1}  \t Bat X:{2} \t Ball Velocity:{3}",BallPos[0].ToString(),BallPos[1].ToString(),BatPos.ToString(),ballVelocity[0].ToString());
+            Debug.WriteLine("Ball X: {0} Ball Y:{1}  \t Bat X:{2} \t Ball X Velocity:{3} Ball Y Velocity:{4}",BallPos[0].ToString(),BallPos[1].ToString(),BatPos[0].ToString(),ballVelocity[0].ToString(),ballVelocity[1].ToString());
         }
 
         public static void draw()
@@ -119,7 +151,7 @@ namespace Breakout
 
             #region DrawBat
 
-            drawSprite(Sprite.bat_medium, BatPos, FRAME_HEIGHT - 30);
+            drawSprite(Sprite.bat_medium, BatPos[0], BatPos[1]);
 
 
             #endregion
@@ -134,6 +166,8 @@ namespace Breakout
 
             #endregion
 
+        
+
             drawSprite(Sprite.fire, 600, 6);
             drawSprite(Sprite.blue2, 600, 6);
 
@@ -141,6 +175,10 @@ namespace Breakout
 
 
 
+        public static void setupLevel() { 
+        
+        
+        }
 
         // this procedure is called when the mouse is moved
        public static void onMouseMove(object sender, SdlDotNet.Input.MouseMotionEventArgs args)
@@ -165,14 +203,14 @@ namespace Breakout
 
             if (args.Key == Key.Q) {
 
-                ballVelocity[0] -= 1;
-                ballVelocity[1] -= 1;
+                ballVelocity[0] *= 2;
+                ballVelocity[1] *= 2;
             }
 
             if (args.Key == Key.E) {
 
-                ballVelocity[0] += 1;
-                ballVelocity[1] += 1;
+                ballVelocity[0] /= 2;
+                ballVelocity[1] /= 2;
             }
 
             // ...
