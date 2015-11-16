@@ -11,7 +11,7 @@ namespace Breakout
     public static class Program
     {
 
-          const int FRAME_WIDTH = 640; 
+        const int FRAME_WIDTH = 640; 
         const int FRAME_HEIGHT = 480;
         const int COLOUR_DEPTH = 32;
         const bool FRAME_RESIZABLE = false;
@@ -20,7 +20,7 @@ namespace Breakout
         const bool USE_HARDWARE = true;
 
         public static bool gameStart = false;
-        public static SdlDotNet.Graphics.Font font = new SdlDotNet.Graphics.Font(@"Arial.ttf", 42);
+        
 
         public static int[] BatPos =  new int[2] {FRAME_WIDTH/2, FRAME_HEIGHT-30};
 
@@ -173,7 +173,7 @@ namespace Breakout
 
         }
 
-
+             
 
         public static void setupLevel() { 
         
@@ -193,7 +193,15 @@ namespace Breakout
                 gameStart = true;
                 
             
-            } 
+            }
+
+
+
+            if (gameStart && args.ButtonPressed) {
+
+                BallPos[0] = Mouse.MousePosition.X;
+                BallPos[1] = Mouse.MousePosition.Y;
+            }
 
         }
 
@@ -264,7 +272,7 @@ namespace Breakout
             Events.MouseButtonUp += new EventHandler<SdlDotNet.Input.MouseButtonEventArgs>(onMouseButton);
             Events.MouseMotion += new EventHandler<SdlDotNet.Input.MouseMotionEventArgs>(onMouseMove);
 
-            Mouse.ShowCursor = false;
+           // Mouse.ShowCursor = false;
 
             // while not quit do process events
             Events.TargetFps = 60;
