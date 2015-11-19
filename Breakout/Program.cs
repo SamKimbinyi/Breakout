@@ -19,7 +19,12 @@ namespace Breakout
         const bool USE_OPENGL = false;
         const bool USE_HARDWARE = true;
 
+
+     
+
+
         public static bool gameStart = false;
+        
         
 
         public static int[] BatPos =  new int[2] {FRAME_WIDTH/2, FRAME_HEIGHT-30};
@@ -27,7 +32,7 @@ namespace Breakout
         
         public static int[] BallPos = new int[2] { FRAME_WIDTH / 2, FRAME_HEIGHT / 2 };
         public static int[] ballVelocity = new int [2] {1,1};
-
+        public static Brick[,] bricks = new Brick[8, 8];
        
 
         // STATE
@@ -148,7 +153,7 @@ namespace Breakout
         public static void draw()
         {
             drawBackground();
-
+           
             #region DrawBat
 
             drawSprite(Sprite.bat_medium, BatPos[0], BatPos[1]);
@@ -169,21 +174,35 @@ namespace Breakout
         
 
             drawSprite(Sprite.fire, 600, 6);
-            drawSprite(Sprite.blue2, 600, 6);
+       
 
         }
 
              
 
-        public static void setupLevel() { 
-        
+        public static void setupLevel() {
+
+            for (int x = 0; x < bricks.Length/8; x++)
+            {
+                for (int y = 0; y < bricks.Length/8; y++) {
+
+
+                    bricks[x, y].sprite = Sprite.bricks;
+                    bricks[x, y].x = 40;
+                    bricks[x, y].y = 40;
+
+                    drawSprite(bricks[x, y].sprite, bricks[x, y].x, bricks[x, y].y);
+                }
+
+
+            }
         
         }
 
         // this procedure is called when the mouse is moved
        public static void onMouseMove(object sender, SdlDotNet.Input.MouseMotionEventArgs args)
         {
-            
+
         }
 
         // this procedure is called when a mouse button is pressed or released
@@ -197,11 +216,7 @@ namespace Breakout
 
 
 
-            if (gameStart && args.ButtonPressed) {
-
-                BallPos[0] = Mouse.MousePosition.X;
-                BallPos[1] = Mouse.MousePosition.Y;
-            }
+          
 
         }
 
@@ -335,6 +350,9 @@ namespace Breakout
             sprite_sheet_cut[(int)Sprite.flare] = new Rectangle(320, 160, 80, 80); ;
             sprite_sheet_cut[(int)Sprite.swirl] = new Rectangle(200, 280, 80, 80); ;
             sprite_sheet_cut[(int)Sprite.spiral] = new Rectangle(320, 280, 80, 80); ;
+
+
+            setupLevel();
         }
 
         // This procedure is called when the event loop receives an exit event (window close button is pressed)
@@ -353,6 +371,14 @@ namespace Breakout
         public static Surface imgSpriteSheet;
 
         // Sprite Identifiers
+
+        public struct Brick{
+        
+       public int x;
+       public  int y; 
+       public Sprite sprite;
+        
+        };
 
         public enum Sprite
         {
@@ -380,7 +406,6 @@ namespace Breakout
             coin_08, coin_09, coin_10, coin_11,
             coin_12, coin_13, coin_14, coin_15
         };
-
         // All the sprites come from one large image, this is called a 
         // sprite-sheet. For each sprite, we need to know which part (Rectangle)
         // of the larger sheet to use.  We store these rectangles in a variable
