@@ -11,6 +11,7 @@ namespace Breakout
     public static class Program
     {
 
+
         const int FRAME_WIDTH = 640; 
         const int FRAME_HEIGHT = 480;
         const int COLOUR_DEPTH = 32;
@@ -20,9 +21,10 @@ namespace Breakout
         const bool USE_HARDWARE = true;
 
 
-     
 
 
+        public static bool initPhase = true;
+        
         public static bool gameStart = false;
         
         
@@ -32,7 +34,7 @@ namespace Breakout
         
         public static int[] BallPos = new int[2] { FRAME_WIDTH / 2, FRAME_HEIGHT / 2 };
         public static int[] ballVelocity = new int [2] {1,1};
-        public static Brick[,] bricks = new Brick[8, 8];
+        public static Brick[,] bricks = new Brick[17, 5];
        
 
         // STATE
@@ -54,6 +56,7 @@ namespace Breakout
             draw();
             // drawSprite(Sprite.ice,600,40);
 
+           
             // ANIMATE 
             // Step the animation frames ready for the next tick
             // ...
@@ -62,6 +65,8 @@ namespace Breakout
             // Tranfer the new view to the screen for the user to see.
             video.Update();
 
+
+          
         }
 
 
@@ -114,6 +119,32 @@ namespace Breakout
 
             #endregion
 
+            #region BallCollisionDetection
+
+
+            for (int x = 0; x < bricks.GetLength(0); x++) {
+                for (int y = 0; y < bricks.GetLength(1); y++) {
+                    if (intsersects(BallPos[0], BallPos[1], 16, 16, bricks[x, y].x, bricks[x, y].y, 30, 30) && (bricks[x,y].ifHit==false))
+                    {
+                        if (BallPos[1] >= bricks[x, y].y)
+                        {
+                            ballVelocity[1] *= -1;
+                        }
+                        else {
+                            ballVelocity[0] *= -1;
+                        }
+
+                        bricks[x, y].ifHit = true;
+                       
+                    }
+
+                
+                }
+            
+            
+            }
+                
+            #endregion
 
             #region BatCollisionDetection
 
@@ -171,9 +202,13 @@ namespace Breakout
 
             #endregion
 
-        
+            setupLevel();
 
-            drawSprite(Sprite.fire, 600, 6);
+            
+               
+              
+            
+
        
 
         }
@@ -182,16 +217,19 @@ namespace Breakout
 
         public static void setupLevel() {
 
-            for (int x = 0; x < bricks.Length/8; x++)
+            for (int x = 0; x < bricks.GetLength(0); x++)
             {
-                for (int y = 0; y < bricks.Length/8; y++) {
+                for (int y = 0; y < bricks.GetLength(1); y++)
+                {
 
+                    if (bricks[x, y].ifHit != true)
+                    {
+                        bricks[x, y].sprite = Sprite.bricks;
+                        bricks[x, y].x = x * 40;
+                        bricks[x, y].y = y * 40;
 
-                    bricks[x, y].sprite = Sprite.bricks;
-                    bricks[x, y].x = 40;
-                    bricks[x, y].y = 40;
-
-                    drawSprite(bricks[x, y].sprite, bricks[x, y].x, bricks[x, y].y);
+                        drawSprite(bricks[x, y].sprite, bricks[x, y].x, bricks[x, y].y);
+                    }
                 }
 
 
@@ -286,12 +324,15 @@ namespace Breakout
             Events.MouseButtonDown += new EventHandler<SdlDotNet.Input.MouseButtonEventArgs>(onMouseButton);
             Events.MouseButtonUp += new EventHandler<SdlDotNet.Input.MouseButtonEventArgs>(onMouseButton);
             Events.MouseMotion += new EventHandler<SdlDotNet.Input.MouseMotionEventArgs>(onMouseMove);
-
+           
            // Mouse.ShowCursor = false;
 
             // while not quit do process events
             Events.TargetFps = 60;
             Events.Run();
+
+
+            
         }
 
         // This procedure is called after the video has been initialised but before any events have been processed.
@@ -352,7 +393,6 @@ namespace Breakout
             sprite_sheet_cut[(int)Sprite.spiral] = new Rectangle(320, 280, 80, 80); ;
 
 
-            setupLevel();
         }
 
         // This procedure is called when the event loop receives an exit event (window close button is pressed)
@@ -377,6 +417,7 @@ namespace Breakout
        public int x;
        public  int y; 
        public Sprite sprite;
+       public bool ifHit;
         
         };
 
